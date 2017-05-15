@@ -125,8 +125,10 @@ class SelectorDIC(ModelSelector):
                 sum_logL = []
                 for word in self.words:
                     if word == self.this_word:
+                        # we skeep curent word
                         continue
                     word_n, word_len = self.hwords[word]
+
                     sum_logL.append(current_model.score(word_n, word_len))
 
                 current_score = logL - np.average(sum_logL)
@@ -166,6 +168,7 @@ class SelectorCV(ModelSelector):
                     current_model = GaussianHMM(n_components=n_components, random_state=self.random_state, n_iter=1000).fit(train_n, train_len)
                     logL.append(current_model.score(test_n, test_len))
                 current_score = np.average(logL)
+                #print("Word: {} Num States: {} LogL: {}".format(self.this_word,n_components,current_score))
                 # We test if the score maximized
                 if current_score > best_score:
                     best_score = current_score
